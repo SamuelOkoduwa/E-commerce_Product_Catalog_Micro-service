@@ -1,0 +1,38 @@
+# Ignore node modules and build artifacts
+/node_modules
+/product-service/node_modules
+/user-service/node_modules
+
+# Build Artifacts
+/product-service/dist
+/user-service
+/dist
+
+# Environment files
+.env
+/product-service/.env
+/user-service/.env
+
+.DS_Store
+.vscode
+.idea
+npm-debug.log
+yarn-error.log
+coverage
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Ignore OS generated files
+Thumbs.db
+Desktop.ini 
+
+# Ignore build directories
+build
+out
+
+# Ignore dependency directories
+jspm_packages 
+.bower_components
+
