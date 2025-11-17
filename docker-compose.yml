@@ -1,0 +1,50 @@
+# version: '3.8'
+services:
+  # --- 1. User & Auth Service ---
+  auth_db:
+    image: postgres:latest
+    container_name: auth_db
+    environment:
+      POSTGRES_USER: user_auth
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_auth_db
+
+  user_auth_service:
+    build:
+      context: ./user-auth-service
+    container_name: user_auth_service
+    ports:
+      - "3001:3000" # Expose on host port 3001
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://user_auth:password@auth_db:5432/user_auth_db
+    depends_on:
+      - auth_db
+    networks:
+      - internal-net
+
+  # --- 2. Product Service ---
+  product_db:
+    image: mongo:latest # Using MongoDB for a separate data store
+    container_name: product_db
+
+  product_service:
+    build:
+      context: ./product-service
+    container_name: product_service
+    ports:
+      - "3002:3000" # Expose on host port 3000
+    environment:
+      PORT: 3000
+      MONGODB_URI: mongodb://product_db:27017/product_db
+      # This is the internal URL for inter-service communication:
+      AUTH_SERVICE_URL: http://user_auth_service:3000
+    depends_on:
+      - product_db
+      - user_auth_service # Wait for Auth service to start
+    networks:
+      - internal-net
+
+networks:
+  internal-net:
+    driver: bridge
