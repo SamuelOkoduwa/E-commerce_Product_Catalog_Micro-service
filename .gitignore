@@ -3,6 +3,12 @@
 /product-service/node_modules
 /user-service/node_modules
 
+# Ignore build directories and lock files
+/product-service/build
+/product-service/packge-lock.json
+/user-service/build
+/user-service/packge-lock.json
+
 # Build Artifacts
 /product-service/dist
 /user-service
